@@ -25,6 +25,47 @@
 				gray: "0F0F0F"
 			}
 
+			const defaultBookmarks = [
+							{
+								title: "Reddit",
+								link: "http://reddit.com", 
+								backgroundColor: BACKGROUND_COLORS.red
+							},
+							{
+								title: "HckrNews",
+								link: "http://hckrnews.com", 
+								backgroundColor: BACKGROUND_COLORS.purple
+							},
+							{
+								title: "ScreenRant",
+								link: "http://screenrant.com", 
+								backgroundColor: BACKGROUND_COLORS.yellow
+							},
+							{
+								title: "Facebook",
+								link: "http://facebook.com", 
+								backgroundColor: BACKGROUND_COLORS.blue
+							},
+							{
+								title: "IGN",
+								link:"http://ign.com",
+								backgroundColor: BACKGROUND_COLORS.green
+							},
+							{
+								title: "Joystiq",
+								link: "http://joystiq.com", 
+								backgroundColor: BACKGROUND_COLORS.turqoise
+							},
+							{
+								title: "GitHub",
+								link: "http://github.com",
+								backgroundColor: BACKGROUND_COLORS.plum
+							}
+						]
+
+
+
+			// Modal Vue component
 			var newBookmarkModal = {
 				template: `
 					<div id="newBookmarkModal" class="modal bookmarksWrapper well" @click="checkClickLocation">
@@ -83,6 +124,7 @@
 				methods: {
 					closeModal() {
 						document.getElementById('newBookmarkModal').style.display = "none";
+						this.resetNewBookmark()
 					},
 					addNewBookmark() {
 						const newBookmark = {title: this.title, link: "https://" + this.link, backgroundColor: this.backgroundColor}
@@ -92,6 +134,11 @@
 						localStorage.setItem('bookmarks', JSON.stringify(savedBookmarks))
 						this.$emit('bookmarkAdded', newBookmark)
 						this.closeModal()
+					},
+					resetNewBookmark() {
+						this.title = '';
+						this.link = '';
+						this.backgroundColor = BACKGROUND_COLORS.red
 					},
 					// When the user clicks anywhere outside of the modal, close it
 					checkClickLocation() {
@@ -103,45 +150,7 @@
 				}
 			}
 
-			const defaultBookmarks = [
-							{
-								title: "Reddit",
-								link: "http://reddit.com", 
-								backgroundColor: BACKGROUND_COLORS.red
-							},
-							{
-								title: "HckrNews",
-								link: "http://hckrnews.com", 
-								backgroundColor: BACKGROUND_COLORS.purple
-							},
-							{
-								title: "ScreenRant",
-								link: "http://screenrant.com", 
-								backgroundColor: BACKGROUND_COLORS.yellow
-							},
-							{
-								title: "Facebook",
-								link: "http://facebook.com", 
-								backgroundColor: BACKGROUND_COLORS.blue
-							},
-							{
-								title: "IGN",
-								link:"http://ign.com",
-								backgroundColor: BACKGROUND_COLORS.green
-							},
-							{
-								title: "Joystiq",
-								link: "http://joystiq.com", 
-								backgroundColor: BACKGROUND_COLORS.turqoise
-							},
-							{
-								title: "GitHub",
-								link: "http://github.com",
-								backgroundColor: BACKGROUND_COLORS.plum
-							}
-						]
-
-
+			// Main app Vue component
 			var app = new Vue({
 				el: '#vue-app',
 				template: `
@@ -164,6 +173,7 @@
 				methods: {
 					openModal() {
 						document.getElementById('newBookmarkModal').style.display = "block";
+						document.getElementById('bkmrkTitle').focus();
 					},
 					refreshBookmarks(e) {
 						console.log("Adding bookmark: " + JSON.stringify(e))
