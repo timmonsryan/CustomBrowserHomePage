@@ -1,21 +1,81 @@
 <!DOCTYPE html>
 <html>
-<head>
-	<title>Bookmarks</title>
-	<link href='https://fonts.googleapis.com/css?family=Play' rel='stylesheet' type='text/css'>
-	<link rel="stylesheet" type="text/css" href="bootstrap.min.css">
-	<link rel="stylesheet" type="text/css" href="style.css">
-</head>
-<body>
-	<h1>Bookmarks</h1>
-	<div id="bookmarksWrapper" class="well">
-		<a class="bookmark"  style="background: #FF4848" href="http://reddit.com">Reddit</a>
-		<a class="bookmark"  style="background: #A27AFE" href="http://hckrnews.com">HckrNews</a>
-		<a class="bookmark"  style="background: #FFE680" href="http://screenrant.com">ScreenRant</a>
-		<a class="bookmark"  style="background: #6699FF" href="http://facebook.com">Facebook</a>
-		<a class="bookmark"  style="background: #33FDC0; font-size: 80px" href="http://ign.com">IGN</a>
-		<a class="bookmark"  style="background: #2FAACE" href="http://joystiq.com">Joystiq</a>
-		<a class="bookmark"  style="background: #993366" href="http://github.com/timmonsryan">GitHub</a>
-	</div>	
-</body>
+	<head>
+		<title>Bookmarks</title>
+		<link href='https://fonts.googleapis.com/css?family=Play' rel='stylesheet' type='text/css'>
+		<link rel="stylesheet" type="text/css" href="bootstrap.min.css">
+		<link rel="stylesheet" type="text/css" href="style.css">
+		<script src="https://unpkg.com/vue@2.1.10/dist/vue.js"></script>
+	</head>
+	<body>
+		<h1>Bookmarks</h1>
+		
+		<!-- Empty div that stores main vue app component -->
+		<div class="container" id="vue-app"/> 
+
+		<script>
+			const BACKGROUND_COLORS = {
+				red: "#FF4848",
+				purple: "#A27AFE",
+				yellow: "#FFE680",
+				blue: "#6699FF",
+				green: "#33FDC0",
+				turqoise: "#2FAACE",
+				plum: "#993366"
+			}
+			
+			const defaultBookmarks = [
+							{
+								title: "Reddit",
+								link: "http://reddit.com", 
+								backgroundColor: BACKGROUND_COLORS.red
+							},
+							{
+								title: "HckrNews",
+								link: "http://hckrnews.com", 
+								backgroundColor: BACKGROUND_COLORS.purple
+							},
+							{
+								title: "ScreenRant",
+								link: "http://screenrant.com", 
+								backgroundColor: BACKGROUND_COLORS.yellow
+							},
+							{
+								title: "Facebook",
+								link: "http://facebook.com", 
+								backgroundColor: BACKGROUND_COLORS.blue
+							},
+							{
+								title: "IGN",
+								link:"http://ign.com",
+								backgroundColor: BACKGROUND_COLORS.green
+							},
+							{
+								title: "Joystiq",
+								link: "http://joystiq.com", 
+								backgroundColor: BACKGROUND_COLORS.turqoise
+							},
+							{
+								title: "GitHub",
+								link: "http://github.com",
+								backgroundColor: BACKGROUND_COLORS.plum
+							}
+						]
+
+
+			var app = new Vue({
+				el: '#vue-app',
+				template: `
+					<div id="bookmarksWrapper" class="well">
+						<a v-for="bkmrk in bookmarks" class="bookmark" :style="{background: bkmrk.backgroundColor}" :href="bkmrk.link">{{bkmrk.title}}</a>
+					</div>
+				`,
+				data() {
+					return {
+						bookmarks: defaultBookmarks
+					}
+				}
+			});
+		</script>
+	</body>
 </html>
