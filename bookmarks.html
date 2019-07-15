@@ -85,8 +85,12 @@
 						document.getElementById('newBookmarkModal').style.display = "none";
 					},
 					addNewBookmark() {
-						// TODO: Actually save the bookmark
-						const newBookmark = {title: this.title, link: this.link, backgroundColor: this.backgroundColor}
+						const newBookmark = {title: this.title, link: "https://" + this.link, backgroundColor: this.backgroundColor}
+						let savedBookmarks = JSON.parse(localStorage.getItem('bookmarks'))
+						if (savedBookmarks == null) {savedBookmarks = []}
+						savedBookmarks.push(newBookmark)
+						localStorage.setItem('bookmarks', JSON.stringify(savedBookmarks))
+						this.$emit('bookmarkAdded', newBookmark)
 						this.closeModal()
 					},
 					// When the user clicks anywhere outside of the modal, close it
@@ -142,7 +146,7 @@
 				el: '#vue-app',
 				template: `
 					<div id="bookmarksWrapper" class="well">
-						<new-bookmark-modal/>
+						<new-bookmark-modal @bookmarkAdded="refreshBookmarks"/>
 						<div>
 							<a v-for="bkmrk in bookmarks" class="bookmark" :style="{background: bkmrk.backgroundColor}" :href="bkmrk.link">{{bkmrk.title}}</a>
 							<div class="bookmark plusButton" @click="openModal">+</div>
@@ -151,7 +155,7 @@
 				`,
 				data() {
 					return {
-						bookmarks: defaultBookmarks
+						bookmarks: JSON.parse(localStorage.getItem('bookmarks'))
 					}
 				},
 				components: {
@@ -160,6 +164,16 @@
 				methods: {
 					openModal() {
 						document.getElementById('newBookmarkModal').style.display = "block";
+					},
+					refreshBookmarks(e) {
+						console.log("Adding bookmark: " + JSON.stringify(e))
+						this.bookmarks.push(e);
+					}
+				},
+				mounted() {
+					if (this.bookmarks == null) {
+						localStorage.setItem('bookmarks', JSON.stringify(defaultBookmarks)); 
+						this.bookmarks = defaultBookmarks
 					}
 				}
 			});
