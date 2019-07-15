@@ -16,5 +16,8 @@
   "bugs": {
     "url": "https://github.com/MatthewTimmons/CustomBrowserHomePage/issues"
   },
-  "homepage": "https://github.com/MatthewTimmons/CustomBrowserHomePage#readme"
+  "homepage": "https://github.com/MatthewTimmons/CustomBrowserHomePage#readme",
+  "dependencies": {
+    "jquery": "^3.4.1"
+  }
 }

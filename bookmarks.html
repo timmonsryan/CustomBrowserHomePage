@@ -21,9 +21,84 @@
 				blue: "#6699FF",
 				green: "#33FDC0",
 				turqoise: "#2FAACE",
-				plum: "#993366"
+				plum: "#993366",
+				gray: "0F0F0F"
 			}
-			
+
+			var newBookmarkModal = {
+				template: `
+					<div id="newBookmarkModal" class="modal bookmarksWrapper well" @click="checkClickLocation">
+						<div class="modal-content">
+							<span class="close" @click="closeModal">&times;</span>
+							<h2>New bookmark</h2>
+							<table>
+								<tr>
+									<td>
+										<label for="bkmrkTitle">Bookmark title</label>
+									</td>
+									<td>
+										<input type="text" id="bkmrkTitle" v-model="title">
+									</td>
+								</tr>
+								<tr>
+									<td>
+										<label for="bkmrkLink">Bookmark link</label>
+									</td>
+									<td>
+										<input type="text" id="bkmrkLink" v-model="link">
+									</td>
+								</tr>
+								<tr>
+									<td>
+										<label for="bkmrkColor">Bookmark color</label>
+									</td>
+									<td>
+										<button 
+											v-for="(color, key) in BACKGROUND_COLORS" 
+											key="key"
+											:style="{background: color}" 
+											class="colorOption"
+											@click="backgroundColor = color"
+											>
+									</td>
+								</tr>
+							</table>
+							<div id ="exampleBookmark">
+								<div class="bookmark" :style="{background: backgroundColor}">{{title}}</div>
+							</div>
+							<div style="text-align:center">
+								<button class="saveButton" @click="addNewBookmark">Save</button>
+							</div>
+						</div>
+					</div>
+				`,
+				data() {
+					return {
+						title: "",
+						link: "", 
+						backgroundColor: BACKGROUND_COLORS.red,
+						BACKGROUND_COLORS
+					}
+				},
+				methods: {
+					closeModal() {
+						document.getElementById('newBookmarkModal').style.display = "none";
+					},
+					addNewBookmark() {
+						// TODO: Actually save the bookmark
+						const newBookmark = {title: this.title, link: this.link, backgroundColor: this.backgroundColor}
+						this.closeModal()
+					},
+					// When the user clicks anywhere outside of the modal, close it
+					checkClickLocation() {
+						const modal = document.getElementById('newBookmarkModal')
+						  if (event.target == modal) {
+							this.closeModal()
+						  }
+					}
+				}
+			}
+
 			const defaultBookmarks = [
 							{
 								title: "Reddit",
@@ -67,12 +142,24 @@
 				el: '#vue-app',
 				template: `
 					<div id="bookmarksWrapper" class="well">
-						<a v-for="bkmrk in bookmarks" class="bookmark" :style="{background: bkmrk.backgroundColor}" :href="bkmrk.link">{{bkmrk.title}}</a>
+						<new-bookmark-modal/>
+						<div>
+							<a v-for="bkmrk in bookmarks" class="bookmark" :style="{background: bkmrk.backgroundColor}" :href="bkmrk.link">{{bkmrk.title}}</a>
+							<div class="bookmark plusButton" @click="openModal">+</div>
+						</div>
 					</div>
 				`,
 				data() {
 					return {
 						bookmarks: defaultBookmarks
+					}
+				},
+				components: {
+					"new-bookmark-modal": newBookmarkModal
+				},
+				methods: {
+					openModal() {
+						document.getElementById('newBookmarkModal').style.display = "block";
 					}
 				}
 			});
